@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainPanel;
     public GameObject gameOverPanel;
     public GameObject levelCompletedPanel;
+    public GameObject LevelInfo;
 
     // private bool isGameOverMenuVisible = false;
     // private bool isMainMenuVisible = true;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
     {
         _levelCompleted = false;
         mainPanel.SetActive(false);
+        LevelInfo.SetActive(false);
         Time.timeScale = 1;
         CollisionDetect.isBallMoving = true;
     }

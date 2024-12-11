@@ -5,8 +5,8 @@ using UnityEngine;
 public class BallMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb; // fizik bileseni 
-
-    private float moveX = 0.65f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
+        // 0.65f idi
+        private float moveX = 0.3f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
     private Vector3 targetPosition;
     [SerializeField] private int forwardSpeed = 22; // z ekseninde topun temel hareketi
     [SerializeField] private int moveXSpeed = 20; // x ekseninde hareket etme hizi
@@ -42,7 +42,7 @@ public class BallMovement : MonoBehaviour
         }
 
 
-        if (InputHandler.movingRight && CollisionDetect.isBallMoving)
+        if (InputHandler.movingRight && CollisionDetect.isBallMoving)//platformun sınırlmak yerine topun hareketlerinş sınırlamayı dene
         {
             targetPosition = new Vector3(Mathf.Clamp(transform.position.x + moveX, -moveX, moveX),
                 transform.position.y, rb.position.z);
