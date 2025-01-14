@@ -7673,6 +7673,11 @@ PrefabInstance:
       propertyPath: endLineTransform
       value: 
       objectReference: {fileID: 942854965}
+    - target: {fileID: 7128903733290785978, guid: adf9a64cd92580648b999863c8327473,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7623325291539229080, guid: adf9a64cd92580648b999863c8327473,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

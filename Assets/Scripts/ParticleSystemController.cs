@@ -18,7 +18,7 @@ public class ParticleSystemController : MonoBehaviour
         {
             _particleSystem = GetComponent<ParticleSystem>();
         }
-
+            
         if (_particleSystem != null)
         {
             psMain = _particleSystem.main;
@@ -40,8 +40,8 @@ public class ParticleSystemController : MonoBehaviour
 
         if (GameManager.instance.isBallMoving)
         {
-            psEmission.rateOverTime = 5f;
-            psMain.startSpeed = 4f;
+            psEmission.rateOverTime = 15f;
+            psMain.startSpeed = 15f;
         }
         else
         {
