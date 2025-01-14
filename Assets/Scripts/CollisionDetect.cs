@@ -1,40 +1,40 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 
 public class CollisionDetect : MonoBehaviour
 {
-    public static bool isBallMoving = false;
-    public static bool jump = false;
-    public static bool isGrounded = false;
+    
 
-    public GameObject levelCompletedPanel;
-
+    private void Update()
+    {
+        if (GameManager.instance._gameOver)
+        {
+            GameManager.instance.GameOver();
+        }
+        else if (GameManager.instance._levelCompleted)
+        {
+            GameManager.instance.LevelCompleted();
+        }
+    }
 
     private void OnCollisionEnter(Collision other)
     {
         if (other.collider.tag == "Obstacle")
         {
-            Debug.Log("carpti");
-            GameManager._gameOver = true;
+            GameManager.instance._gameOver = true;
+            GameManager.instance.isBallMoving = false;
         }
         else if (other.collider.tag == "Finish")
         {
-            GameManager._levelCompleted = true;
-            Debug.Log("Game has been finished succesfully");
+            GameManager.instance._levelCompleted = true;
+                GameManager.instance.isBallMoving = false;
         }
         else if (other.collider.tag == "JumpingPad")
         {
-            jump = true;
+            GameManager.instance.jump = true;
         }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-            isGrounded = true;
-        else
-            isGrounded = false;
     }
 
 }

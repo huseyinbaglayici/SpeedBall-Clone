@@ -1,35 +1,33 @@
 using System;
-using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Debug = UnityEngine.Debug;
 
 public class InputHandler : MonoBehaviour
 {
-    //private PlayerInputs playerInput;
+    public static bool movingRight;
+    public static bool cameraLocked = true;
+    public Touch touch;
 
-    public static bool movingRight = false;
-    // private void Awake()
-    // {
-    //     playerInput = new PlayerInputs();
-    //     playerInput.Movement.TapX.performed += MovePlayer;
-    // }
+    private void Start()
+    {
+        movingRight = false;
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        // if (Input.GetKeyDown(KeyCode.A))
+        // {
+        //     movingRight = !movingRight;
+        //     cameraLocked = false;
+        // }
+        if (Input.touchCount > 0)
         {
-            Debug.Log("Input alindi moveright degerinin tersi kendine atandi");
-            Debug.Log(movingRight);
-            movingRight = !movingRight;
+            touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                movingRight = !movingRight;
+                cameraLocked = false;
+            }
         }
     }
-
-    //
-    // private void MovePlayer(InputAction.CallbackContext context)
-    // {
-    //     if (context.ReadValueAsButton())
-    //     {
-    //     }
-    // }
 }

@@ -1,68 +1,72 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject mainPanel;
-    public GameObject gameOverPanel;
-    public GameObject levelCompletedPanel;
-    public GameObject LevelInfo;
+    public static GameManager instance;
 
-    // private bool isGameOverMenuVisible = false;
-    // private bool isMainMenuVisible = true;
-    // private bool tapToState = true;
+    internal bool _gameOver;
+    internal bool _levelCompleted;
+    internal bool isBallMoving = false;
+    internal bool jump = false;
 
-    public static bool _gameOver;
-    public static bool _levelCompleted;
+    internal int sceneIndex;
 
-    private void Update()
+    private void Start()
     {
-        if (_gameOver)
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (instance != null && instance != this)
         {
-            GameOver();
+            Destroy(this);
         }
-        else if (_levelCompleted)
-        {
-            LevelCompleted();
-        }
+            
+        instance = this;
+        
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void RetryGame()
+    internal void RetryGame()
     {
+        InputHandler.cameraLocked = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        gameOverPanel.SetActive(false);
-        mainPanel.SetActive(true);
+        CinemachineController.instance.SwitchToPlayerCam();
+        MenuController.instance.gameOverPanel.SetActive(false);
+        MenuController.instance.mainPanel.SetActive(true);
+        MenuController.instance.LevelSelectPanel.SetActive(true);
     }
 
-    public void StartGame()
+    internal void StartGame()
     {
         _levelCompleted = false;
-        mainPanel.SetActive(false);
-        LevelInfo.SetActive(false);
+        MenuController.instance.mainPanel.SetActive(false);
+        MenuController.instance.LevelSelectPanel.SetActive(false);
         Time.timeScale = 1;
-        CollisionDetect.isBallMoving = true;
+        isBallMoving = true;
     }
 
-    public void GameOver()
+    internal void GameOver()
     {
-        Time.timeScale = 0;
         _gameOver = false;
-        gameOverPanel.SetActive(true);
-        //isGameOverMenuVisible = true;
+        isBallMoving = false;
+        CinemachineController.instance.SwitchToGameOverCam();
+        MenuController.instance.gameOverPanel.SetActive(true);
     }
 
-    private void LevelCompleted()
+    internal void LevelCompleted()
     {
-        Time.timeScale = 0;
-        levelCompletedPanel.SetActive(true);
+        MenuController.instance.levelCompletedPanel.SetActive(true);
+        StartCoroutine(LevelCompletionWait());
     }
 
-    // public void NextLevel()
-    // {
-    // }
+
+    IEnumerator LevelCompletionWait()
+    {
+        yield return new WaitForSeconds(3f);
+        if(SceneManager.GetActiveScene().buildIndex + 1==5)
+            Application.Quit();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 }

@@ -1,25 +1,50 @@
-using System;
-using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb; // fizik bileseni 
-        // 0.65f idi
-        private float moveX = 0.3f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
+    // rigidbody componenti ve hedefin pozisyonu
+    private Rigidbody rb;
     private Vector3 targetPosition;
-    [SerializeField] private int forwardSpeed = 22; // z ekseninde topun temel hareketi
-    [SerializeField] private int moveXSpeed = 20; // x ekseninde hareket etme hizi
-    [SerializeField] private int jumpingForce = 50; //ziplama gucu
-
-    private float rotationSpeed = 2;
     
-    // [SerializeField] private int fallSpeed = 45;
+    [Header("Switch boundary between two x axis")]
+    [SerializeField] private float moveX = 0.3f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
+
+    [Header("Parameters for ball movement")]
+    [SerializeField] private int forwardSpeed = 22; // z ekseninde topun temel hareketi
+    [SerializeField] [Range(1, 30)] private float moveXSpeed = 5f; // x ekseninde hareket etme hizi
+    [SerializeField] private float jumpingForce; //ziplama g
+    [SerializeField] [Range(-20, 20)] private float gravity;
+    private Vector3 gravityVector;
+    
+    [Header("Rotation for ball material")]
+    [SerializeField] private float rotationSpeed = 2;
 
     private void Start()
     {
+        switch (GameManager.instance.sceneIndex)
+        {
+            case 0:
+                break;
+            case 1:
+                forwardSpeed += 1;
+                break;
+            case 2:
+                forwardSpeed += 1;
+                break;
+            case 3:
+                forwardSpeed += 1;
+                break;
+            case 4:
+                forwardSpeed += 2;
+                break;
+                case 5:
+                forwardSpeed += 1;
+                    break;
+        }
+        gravityVector = new Vector3(0, gravity, 0);
         rb = GetComponent<Rigidbody>();
-        Physics.gravity = new Vector3(0, -60f, 0);
+        Physics.gravity = gravityVector;
 
         targetPosition = transform.position; // nesnenin baslangictaki konumunu targetpos(hedefpozisyon)`a atadik
     }
@@ -28,26 +53,26 @@ public class BallMovement : MonoBehaviour
     private void FixedUpdate() // fizik olaylarlarinda update Yerine fixedUpdate kullanilmali
     {
         // top hareket ediyor ise topun rb bileseninin hizina `Z eksen hizini` atadik
-        if (CollisionDetect.isBallMoving)
+        if (GameManager.instance.isBallMoving)
         {
             rb.MovePosition(rb.position + Vector3.forward * (forwardSpeed * Time.fixedDeltaTime));
-            // rb.position += Vector3.forward * (Time.fixedDeltaTime * forwardSpeed);
         }
 
         // objemiz jumpingPad ile temas ederse ziplama methodunu calistirip jump(bool)i tekrar false yaptik
-        if (CollisionDetect.jump)
+        if (GameManager.instance.jump)
         {
-            CollisionDetect.jump = false;
-            rb.AddForce(Vector3.up * jumpingForce, ForceMode.Impulse);
+            PlayerJump();
         }
 
-
-        if (InputHandler.movingRight && CollisionDetect.isBallMoving)//platformun sınırlmak yerine topun hareketlerinş sınırlamayı dene
+            Debug.Log(forwardSpeed);
+        
+        if (InputHandler.movingRight &&
+            GameManager.instance.isBallMoving)
         {
             targetPosition = new Vector3(Mathf.Clamp(transform.position.x + moveX, -moveX, moveX),
                 transform.position.y, rb.position.z);
         }
-        else if (!InputHandler.movingRight && CollisionDetect.isBallMoving)
+        else if (!InputHandler.movingRight && GameManager.instance.isBallMoving)
         {
             targetPosition = new Vector3(Mathf.Clamp(transform.position.x - moveX, -moveX, moveX), rb.position.y,
                 transform.position.z);
@@ -55,8 +80,6 @@ public class BallMovement : MonoBehaviour
 
         // Lerp(Dogrususal interpolasyon) kullanmamizin sebebi x ekseninde yumusak bi gecis elde etmek
         float smoothX = Mathf.Lerp(rb.position.x, targetPosition.x, Time.fixedDeltaTime * moveXSpeed);
-        float smoothZ = Mathf.Lerp(rb.position.z, targetPosition.z, Time.fixedDeltaTime * forwardSpeed);
-
         Vector3 newPosition = new Vector3(smoothX, rb.position.y, rb.position.z);
         rb.MovePosition(newPosition);
     }
@@ -64,11 +87,13 @@ public class BallMovement : MonoBehaviour
     private void Update()
     {
         // topa donme islemi uygulayacagiz
-        if(CollisionDetect.isBallMoving && Time.timeScale != 0)
+        if (GameManager.instance.isBallMoving && Time.timeScale != 0)
             transform.Rotate(Vector3.right * rotationSpeed);
     }
-    // private void PlayerJump()
-    // {
-    //     rb.velocity = Vector3.up * jumpingForce;
-    // }
+
+    private void PlayerJump()
+    {
+        GameManager.instance.jump = false;
+        rb.AddForce(Vector3.up * jumpingForce, ForceMode.Impulse);
+    }
 }
