@@ -46,27 +46,9 @@ public class LevelLoader : MonoBehaviour
         SceneManager.LoadScene("Level05");
     }
 
-    // public void OpenLevel06()
-    // {
-    //     //if (activeSceneName != SceneManager.GetActiveScene().name)
-    //         SceneManager.LoadScene("Level06");
-    // }
-
-    public void OpenLevel07()
+    public void OpenLevel06()
     {
         //if (activeSceneName != SceneManager.GetActiveScene().name)
-        SceneManager.LoadScene("Level07");
-    }
-
-    public void OpenLevel08()
-    {
-        //if (activeSceneName != SceneManager.GetActiveScene().name)
-        SceneManager.LoadScene("Level08");
-    }
-
-    public void OpenLevel09()
-    {
-        //if (activeSceneName != SceneManager.GetActiveScene().name)
-        SceneManager.LoadScene("Level09");
+            SceneManager.LoadScene("Level06");
     }
 }

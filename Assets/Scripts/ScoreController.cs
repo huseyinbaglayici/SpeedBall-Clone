@@ -8,7 +8,6 @@ public class ScoreController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
     private int score;
-    private float nextUpdateTime = 0f;
     private int incrementBySceneIndex;
 
     private void Start()
@@ -16,13 +15,12 @@ public class ScoreController : MonoBehaviour
         incrementBySceneIndex = GameManager.instance.sceneIndex;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (GameManager.instance.isBallMoving)
         {
-            if (Time.time >= nextUpdateTime)
-                score += 1;
-            nextUpdateTime = Time.time + 1f;
+            score += 1;
+            scoreText.text = score.ToString();
         }
     }
 }

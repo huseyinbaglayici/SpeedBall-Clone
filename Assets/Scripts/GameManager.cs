@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(SceneManager.GetActiveScene().buildIndex);
     }
 
-    internal void RetryGame()
+    public void RetryGame()
     {
         InputHandler.cameraLocked = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         MenuController.instance.LevelSelectPanel.SetActive(true);
     }
 
-    internal void StartGame()
+    public void StartGame()
     {
         _levelCompleted = false;
         MenuController.instance.mainPanel.SetActive(false);
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     IEnumerator LevelCompletionWait()
     {
         yield return new WaitForSeconds(3f);
-        if(SceneManager.GetActiveScene().buildIndex + 1==5)
+        if(sceneIndex + 1 == 6)
             Application.Quit();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

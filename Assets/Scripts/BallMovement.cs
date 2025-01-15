@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,15 @@ public class BallMovement : MonoBehaviour
 
     [Header("Rotation for ball material")] [SerializeField]
     private float rotationSpeed = 2;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogError("rb doesnt found");
+        }
+    }
 
     private void Start()
     {
