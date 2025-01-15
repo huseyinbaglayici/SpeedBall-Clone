@@ -6,42 +6,54 @@ public class BallMovement : MonoBehaviour
     // rigidbody componenti ve hedefin pozisyonu
     private Rigidbody rb;
     private Vector3 targetPosition;
-    
-    [Header("Switch boundary between two x axis")]
-    [SerializeField] private float moveX = 0.3f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
 
-    [Header("Parameters for ball movement")]
-    [SerializeField] private int forwardSpeed = 22; // z ekseninde topun temel hareketi
+    [Header("Switch boundary between two x axis")] [SerializeField]
+    private float moveX = 0.3f; // top -moveX ve moveX degerleri arasinda gidecek (Mathf.clamp() ile sinirlandirilacak)
+
+    [Header("Parameters for ball movement")] [SerializeField]
+    private int forwardSpeed = 22; // z ekseninde topun temel hareketi
+
     [SerializeField] [Range(1, 30)] private float moveXSpeed = 5f; // x ekseninde hareket etme hizi
     [SerializeField] private float jumpingForce; //ziplama g
     [SerializeField] [Range(-20, 20)] private float gravity;
     private Vector3 gravityVector;
-    
-    [Header("Rotation for ball material")]
-    [SerializeField] private float rotationSpeed = 2;
+
+    [Header("Rotation for ball material")] [SerializeField]
+    private float rotationSpeed = 2;
 
     private void Start()
     {
         switch (GameManager.instance.sceneIndex)
         {
             case 0:
+                forwardSpeed = 15;
                 break;
             case 1:
-                forwardSpeed += 1;
+                forwardSpeed = 20;
                 break;
             case 2:
-                forwardSpeed += 1;
+                forwardSpeed = 25;
                 break;
             case 3:
-                forwardSpeed += 1;
+                forwardSpeed = 30;
                 break;
             case 4:
-                forwardSpeed += 2;
+                forwardSpeed = 35;
                 break;
-                case 5:
-                forwardSpeed += 1;
-                    break;
+            case 5:
+                forwardSpeed = 40;
+                break;
+            case 6:
+                forwardSpeed = 45;
+                break;
+            case 7:
+                forwardSpeed = 50;
+                break;
+            case 8:
+                forwardSpeed = 65;
+                break;
         }
+
         gravityVector = new Vector3(0, gravity, 0);
         rb = GetComponent<Rigidbody>();
         Physics.gravity = gravityVector;
@@ -64,8 +76,8 @@ public class BallMovement : MonoBehaviour
             PlayerJump();
         }
 
-            Debug.Log(forwardSpeed);
-        
+        Debug.Log(forwardSpeed);
+
         if (InputHandler.movingRight &&
             GameManager.instance.isBallMoving)
         {
